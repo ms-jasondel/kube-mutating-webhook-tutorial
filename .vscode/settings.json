@@ -1,0 +1,4 @@
+{
+    // for purposes of go, drop 2 dirs below where src & bin live.
+    "go.gopath": "${workspaceFolder}/../../"
+}
