@@ -23,8 +23,12 @@ spec:
             - -v=4
             - 2>&1
           ports:
-          - port: 6379
-            targetPort: 6379
+          - containerPort: 6379
+          - containerPort: 2345         
+          securityContext:
+            capabilities:
+              add:
+              - SYS_PTRACE
           volumeMounts:
             - name: webhook-certs
               mountPath: /etc/webhook/certs

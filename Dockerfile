@@ -6,10 +6,15 @@ RUN go get github.com/derekparker/delve/cmd/dlv
 RUN dep ensure 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o kube-mutating-webhook-tutorial .
 
-ENTRYPOINT ["dlv debug /go/src/webhook/kube-mutating-webhook-tutorial -l 0.0.0.0:2345 --headless=true --log=true -- server"]
+ENTRYPOINT ["/go/bin/dlv", "debug" , "-l", "0.0.0.0:2345", "--headless=true", "--log=true", "--api-version=2", "--", "/go/src/webhook/debug", "server"]
 
 #FROM alpine:latest
 #COPY --from=build /go/src/webhook/kube-mutating-webhook-tutorial /kube-mutating-webhook-tutorial
 # Install debugger.
 
 #ENTRYPOINT ["./kube-mutating-webhook-tutorial"]
+
+# /go/bin/dlv debug -l 0.0.0.0:2345 --headless=true --log=true --api-version=2 -- /go/src/webhook/debug server
+
+# Run with priveledge:
+#docker run --security-opt=seccomp:unconfined -p 2345:2345 wthacr.azurecr.io/webhook:dbg
